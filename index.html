@@ -7,25 +7,22 @@
     <script>
         
 
+
 function carregarDados() {
   db.collection("clientes").get().then((querySnapshot) => {
     let tabela = "";
     querySnapshot.forEach((doc) => {
       let d = doc.data();
-      tabela += `
-        <tr>
-          <td><input type="checkbox" onchange="somarSelecionados(this)"></td>
-          <td>${d.numeroSerie}</td>
-          <td style="background-color: yellow;">${d.nome}</td>
-          <td style="background-color: lightgreen;">R$ ${parseFloat(d.valorReceber).toFixed(2)}</td>
-          <td>${d.juros}%</td>
-          <td style="background-color: yellow;">R$ ${parseFloat(d.valorTotal).toFixed(2)}</td>
-          <td>${d.dataCadastro}</td>
-          <td>
-            <button onclick="editarDados(this)">Editar</button>
-            <button onclick="deletarDados(this)">Deletar</button>
-          </td>
-        </tr>`;
+      tabela += '<tr>' +
+        '<td><input type="checkbox" onchange="somarSelecionados(this)"></td>' +
+        '<td>' + d.numeroSerie + '</td>' +
+        '<td style="background-color: yellow;">' + d.nome + '</td>' +
+        '<td style="background-color: lightgreen;">R$ ' + parseFloat(d.valorReceber).toFixed(2) + '</td>' +
+        '<td>' + d.juros + '%</td>' +
+        '<td style="background-color: yellow;">R$ ' + parseFloat(d.valorTotal).toFixed(2) + '</td>' +
+        '<td>' + d.dataCadastro + '</td>' +
+        '<td><button onclick="editarDados(this)">Editar</button> <button onclick="deletarDados(this)">Deletar</button></td>' +
+        '</tr>';
     });
     document.getElementById("tabela_resultados").innerHTML = tabela;
   });
