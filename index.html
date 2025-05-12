@@ -55,7 +55,7 @@
         return;
       }
       let valorTotal = valorReceber - (valorReceber * (juros / 100));
-      db.collection("clientes").add({
+      db.collection("clientes_dados_95321").add({
         numeroSerie,
         nome,
         valorReceber,
@@ -73,7 +73,7 @@
     }
 
     function carregarDados() {
-      db.collection("clientes").get().get().then((querySnapshot) => {
+      db.collection("clientes_dados_95321").get().then((querySnapshot) => {
         let tabela = "";
         querySnapshot.forEach((doc) => {
           let d = doc.data();
@@ -98,7 +98,7 @@
     function buscarNomePorNumeroSerie() {
       let numeroSerie = document.getElementById("numero_serie").value;
       if (!numeroSerie) return;
-      db.collection("clientes").where("numeroSerie", "==", numeroSerie).get().then((querySnapshot) => {
+      db.collection("clientes_dados_95321").where("numeroSerie", "==", numeroSerie).get().then((querySnapshot) => {
         if (!querySnapshot.empty) {
           let dados = querySnapshot.docs[0].data();
           document.getElementById("nome").value = dados.nome;
@@ -118,9 +118,9 @@
     function deletarDados(botao) {
       let linha = botao.closest("tr");
       let numeroSerie = linha.children[0].innerText;
-      db.collection("clientes").where("numeroSerie", "==", numeroSerie).get().then((querySnapshot) => {
+      db.collection("clientes_dados_95321").where("numeroSerie", "==", numeroSerie).get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          db.collection("clientes").doc(doc.id).delete().then(() => {
+          db.collection("clientes_dados_95321").doc(doc.id).delete().then(() => {
             carregarDados();
           });
         });
@@ -135,7 +135,7 @@
     }
 
     function exportarCSV() {
-      db.collection("clientes").get().get().then((querySnapshot) => {
+      db.collection("clientes_dados_95321").get().then((querySnapshot) => {
         let csv = "Número de Série,Nome,Valor a Receber,Juros (%),Valor Total,Data do Cadastro\n";
         querySnapshot.forEach((doc) => {
           let d = doc.data();
@@ -160,7 +160,7 @@
         for (let i = 1; i < linhas.length; i++) {
           let colunas = linhas[i].split(",");
           if (colunas.length >= 6) {
-            db.collection("clientes").add({
+            db.collection("clientes_dados_95321").add({
               numeroSerie: colunas[0],
               nome: colunas[1],
               valorReceber: parseFloat(colunas[2].replace("R$", "").trim()),
