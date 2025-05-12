@@ -13,16 +13,20 @@ function carregarDados() {
     let tabela = "";
     querySnapshot.forEach((doc) => {
       let d = doc.data();
-      tabela += '<tr>' +
-        '<td><input type="checkbox" onchange="somarSelecionados(this)"></td>' +
-        '<td>' + d.numeroSerie + '</td>' +
-        '<td style="background-color: yellow;">' + d.nome + '</td>' +
-        '<td style="background-color: lightgreen;">R$ ' + parseFloat(d.valorReceber).toFixed(2) + '</td>' +
-        '<td>' + d.juros + '%</td>' +
-        '<td style="background-color: yellow;">R$ ' + parseFloat(d.valorTotal).toFixed(2) + '</td>' +
-        '<td>' + d.dataCadastro + '</td>' +
-        '<td><button onclick="editarDados(this)">Editar</button> <button onclick="deletarDados(this)">Deletar</button></td>' +
-        '</tr>';
+      tabela += `
+        <tr>
+          <td><input type="checkbox" onchange="somarSelecionados()"></td>
+          <td>${d.numeroSerie}</td>
+          <td>${d.nome}</td>
+          <td>R$ ${parseFloat(d.valorReceber).toFixed(2)}</td>
+          <td>${d.juros}%</td>
+          <td>R$ ${parseFloat(d.valorTotal).toFixed(2)}</td>
+          <td>${d.dataCadastro}</td>
+          <td>
+            <button onclick="editarDados(this)">Editar</button>
+            <button onclick="deletarDados(this)">Deletar</button>
+          </td>
+        </tr>`;
     });
     document.getElementById("tabela_resultados").innerHTML = tabela;
   });
@@ -165,6 +169,7 @@ function buscarNomePorNumeroSerie() {
     });
 }
 
+
 function somarSelecionados() {
   let checkboxes = document.querySelectorAll("#tabela_resultados input[type='checkbox']");
   let soma = 0;
@@ -175,6 +180,11 @@ function somarSelecionados() {
       let valor = parseFloat(linha.children[5].innerText.replace("R$", "").replace(",", "."));
       soma += valor;
     }
+  });
+
+  document.getElementById("soma_valores").innerText = soma.toFixed(2);
+}
+
   });
 
   document.getElementById("soma_valores").innerText = soma.toFixed(2);
@@ -200,6 +210,7 @@ function buscarNomePorNumeroSerie() {
     });
 }
 
+
 function somarSelecionados() {
   let checkboxes = document.querySelectorAll("#tabela_resultados input[type='checkbox']");
   let soma = 0;
@@ -210,6 +221,11 @@ function somarSelecionados() {
       let valor = parseFloat(linha.children[5].innerText.replace("R$", "").replace(",", "."));
       soma += valor;
     }
+  });
+
+  document.getElementById("soma_valores").innerText = soma.toFixed(2);
+}
+
   });
 
   document.getElementById("soma_valores").innerText = soma.toFixed(2);
@@ -233,6 +249,7 @@ function buscarNomePorNumeroSerie() {
     });
 }
 
+
 function somarSelecionados() {
   let checkboxes = document.querySelectorAll("#tabela_resultados input[type='checkbox']");
   let soma = 0;
@@ -243,6 +260,11 @@ function somarSelecionados() {
       let valor = parseFloat(linha.children[5].innerText.replace("R$", "").replace(",", "."));
       soma += valor;
     }
+  });
+
+  document.getElementById("soma_valores").innerText = soma.toFixed(2);
+}
+
   });
 
   document.getElementById("soma_valores").innerText = soma.toFixed(2);
@@ -279,6 +301,7 @@ function buscarNomePorNumeroSerie() {
     });
 }
 
+
 function somarSelecionados() {
   let checkboxes = document.querySelectorAll("#tabela_resultados input[type='checkbox']");
   let soma = 0;
@@ -289,6 +312,11 @@ function somarSelecionados() {
       let valor = parseFloat(linha.children[5].innerText.replace("R$", "").replace(",", "."));
       soma += valor;
     }
+  });
+
+  document.getElementById("soma_valores").innerText = soma.toFixed(2);
+}
+
   });
 
   document.getElementById("soma_valores").innerText = soma.toFixed(2);
@@ -358,6 +386,7 @@ function buscarNomePorNumeroSerie() {
     });
 }
 
+
 function somarSelecionados() {
   let checkboxes = document.querySelectorAll("#tabela_resultados input[type='checkbox']");
   let soma = 0;
@@ -368,6 +397,11 @@ function somarSelecionados() {
       let valor = parseFloat(linha.children[5].innerText.replace("R$", "").replace(",", "."));
       soma += valor;
     }
+  });
+
+  document.getElementById("soma_valores").innerText = soma.toFixed(2);
+}
+
   });
 
   document.getElementById("soma_valores").innerText = soma.toFixed(2);
