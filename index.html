@@ -73,7 +73,7 @@
     }
 
     function carregarDados() {
-      db.collection("clientes").orderBy("timestamp", "asc").get().then((querySnapshot) => {
+      db.collection("clientes").get().get().then((querySnapshot) => {
         let tabela = "";
         querySnapshot.forEach((doc) => {
           let d = doc.data();
@@ -135,7 +135,7 @@
     }
 
     function exportarCSV() {
-      db.collection("clientes").orderBy("timestamp", "asc").get().then((querySnapshot) => {
+      db.collection("clientes").get().get().then((querySnapshot) => {
         let csv = "Número de Série,Nome,Valor a Receber,Juros (%),Valor Total,Data do Cadastro\n";
         querySnapshot.forEach((doc) => {
           let d = doc.data();
