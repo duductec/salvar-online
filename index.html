@@ -89,11 +89,24 @@ function salvarDados() {
             localStorage.setItem("dados_pagamentos", document.getElementById("tabela_resultados").innerHTML);
         }
 
-        function deletarDados(botao) {
-            let linha = botao.parentNode.parentNode;
-            linha.remove();
-            localStorage.setItem("dados_pagamentos", document.getElementById("tabela_resultados").innerHTML);
-        }
+        
+function deletarDados(botao) {
+  let linha = botao.closest("tr");
+  let numeroSerie = linha.children[0].innerText;
+
+  db.collection("clientes")
+    .where("numeroSerie", "==", numeroSerie)
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        db.collection("clientes").doc(doc.id).delete().then(() => {
+          alert("Cliente deletado do Firebase.");
+          carregarDados();
+        });
+      });
+    });
+}
+
         
         function salvarEmArquivo() {
             let csvContent = "Número de Série,Nome,Valor a Receber,Juros (%),Valor Total,Data do Cadastro\n" + document.getElementById("tabela_resultados").innerText.replace(/\t/g, ",").replace(/\n/g, "\n");
