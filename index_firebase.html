@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pagamentos</title>
+    <script>
+        function carregarDados() {
+    db.collection("clientes").get().then((querySnapshot) => {
+        let tabela = "";
+        querySnapshot.forEach((doc) => {
+            let d = doc.data();
+            tabela += `
+                <tr>
+                    <td>${d.numeroSerie}</td>
+                    <td style="background-color: yellow;">${d.nome}</td>
+                    <td style="background-color: lightgreen;">R$ ${parseFloat(d.valorReceber).toFixed(2)}</td>
+                    <td>${d.juros}%</td>
+                    <td style="background-color: yellow;">R$ ${parseFloat(d.valorTotal).toFixed(2)}</td>
+                    <td>${d.dataCadastro}</td>
+                    <td><button onclick="editarDados(this)">Editar</button> <button onclick="deletarDados(this)">Deletar</button></td>
+                </tr>`;
+        });
+        document.getElementById("tabela_resultados").innerHTML = tabela;
+    });
+
+            if (localStorage.getItem("dados_pagamentos")) {
+                document.getElementById("tabela_resultados").innerHTML = localStorage.getItem("dados_pagamentos");
+            }
+        }
+
+        function verificarNumeroSerie() {
+            let numeroSerie = document.getElementById("numero_serie").value;
+            let linhas = document.querySelectorAll("#tabela_resultados tr");
+            
+            for (let i = 1; i < linhas.length; i++) {
+                let colunas = linhas[i].getElementsByTagName("td");
+                if (colunas[0].innerText === numeroSerie) {
+                    document.getElementById("nome").value = colunas[1].innerText;
+                    break;
+                }
+            }
+        }
+
+        function salvarDados() {
+    let numeroSerie = document.getElementById("numero_serie").value;
+    let nome = document.getElementById("nome").value;
+    let valorReceber = parseFloat(document.getElementById("valor_receber").value);
+    let juros = parseFloat(document.getElementById("juros").value);
+    let dataCadastro = new Date().toLocaleDateString();
+
+    if (isNaN(valorReceber) || isNaN(juros)) {
+        alert("Por favor, preencha todos os campos corretamente.");
+        return;
+    }
+
+    let valorTotal = valorReceber - (valorReceber * (juros / 100));
+
+    db.collection("clientes").add({
+        numeroSerie,
+        nome,
+        valorReceber,
+        juros,
+        valorTotal,
+        dataCadastro
+    }).then(() => {
+        alert("Salvo com sucesso no Firebase!");
+        carregarDados();
+        limparFormulario();
+    }).catch((error) => {
+        console.error("Erro ao salvar: ", error);
+    });
+
+            let numeroSerie = document.getElementById("numero_serie").value;
+            let nome = document.getElementById("nome").value;
+            let valorReceber = parseFloat(document.getElementById("valor_receber").value);
+            let juros = parseFloat(document.getElementById("juros").value);
+            let dataCadastro = new Date().toLocaleDateString();
+            
+            if (isNaN(valorReceber) || isNaN(juros)) {
+                alert("Por favor, preencha todos os campos corretamente.");
+                return;
+            }
+            
+            let valorTotal = valorReceber - (valorReceber * (juros / 100));
+            
+            let resultado = `
+                <tr>
+                    <td>${numeroSerie}</td>
+                    <td style="background-color: yellow;">${nome}</td>
+                    <td style="background-color: lightgreen;">R$ ${valorReceber.toFixed(2)}</td>
+                    <td>${juros}%</td>
+                    <td style="background-color: yellow;">R$ ${valorTotal.toFixed(2)}</td>
+                    <td>${dataCadastro}</td>
+                    <td><button onclick="editarDados(this)">Editar</button> <button onclick="deletarDados(this)">Deletar</button></td>
+                </tr>
+            `;
+            
+            document.getElementById("tabela_resultados").innerHTML += resultado;
+            localStorage.setItem("dados_pagamentos", document.getElementById("tabela_resultados").innerHTML);
+            salvarEmArquivo();
+            limparFormulario();
+        }
+
+        function limparFormulario() {
+            document.getElementById("numero_serie").value = "";
+            document.getElementById("nome").value = "";
+            document.getElementById("valor_receber").value = "";
+            document.getElementById("juros").value = "";
+        }
+
+        function editarDados(botao) {
+            let linha = botao.parentNode.parentNode;
+            document.getElementById("numero_serie").value = linha.cells[0].innerText;
+            document.getElementById("nome").value = linha.cells[1].innerText;
+            document.getElementById("valor_receber").value = parseFloat(linha.cells[2].innerText.replace("R$ ", ""));
+            document.getElementById("juros").value = parseFloat(linha.cells[3].innerText.replace("%", ""));
+            linha.remove();
+            localStorage.setItem("dados_pagamentos", document.getElementById("tabela_resultados").innerHTML);
+        }
+
+        function deletarDados(botao) {
+            let linha = botao.parentNode.parentNode;
+            linha.remove();
+            localStorage.setItem("dados_pagamentos", document.getElementById("tabela_resultados").innerHTML);
+        }
+        
+        function salvarEmArquivo() {
+            let csvContent = "Número de Série,Nome,Valor a Receber,Juros (%),Valor Total,Data do Cadastro\n" + document.getElementById("tabela_resultados").innerText.replace(/\t/g, ",").replace(/\n/g, "\n");
+            
+            let blob = new Blob([csvContent], { type: "text/csv" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "dados_pagamentos.csv";
+            a.click();
+        }
+        
+        function carregarArquivo(event) {
+            let file = event.target.files[0];
+            if (!file) return;
+            
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let linhas = e.target.result.split("\n");
+                let tabela = "";
+                for (let i = 1; i < linhas.length; i++) {
+                    let colunas = linhas[i].split(",");
+                    if (colunas.length >= 6) {
+                        tabela += `
+                            <tr>
+                                <td>${colunas[0]}</td>
+                                <td style="background-color: yellow;">${colunas[1]}</td>
+                                <td style="background-color: lightgreen;">${colunas[2]}</td>
+                                <td>${colunas[3]}</td>
+                                <td style="background-color: yellow;">${colunas[4]}</td>
+                                <td>${colunas[5]}</td>
+                                <td><button onclick="editarDados(this)">Editar</button> <button onclick="deletarDados(this)">Deletar</button></td>
+                            </tr>
+                        `;
+                    }
+                }
+                document.getElementById("tabela_resultados").innerHTML = tabela;
+                localStorage.setItem("dados_pagamentos", tabela);
+            };
+            reader.readAsText(file);
+        }
+    </script>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAMrgw5VvWlP_MKH5R5az-tUOHHvrsJp0M",
+    authDomain: "salva-online.firebaseapp.com",
+    projectId: "salva-online",
+    storageBucket: "salva-online.firebasestorage.app",
+    messagingSenderId: "670777715031",
+    appId: "1:670777715031:web:4de6ff2d661b7471fdf612"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
+</head>
+<body onload="carregarDados()">
+    <h2>Sistema de Pagamentos</h2>
+    <label>Número de Série: <input type="text" id="numero_serie" onblur="verificarNumeroSerie()"></label><br>
+    <label>Nome: <input type="text" id="nome"></label><br>
+    <label>Valor a Receber: <input type="number" id="valor_receber" step="0.01"></label><br>
+    <label>Juros (%): <input type="number" id="juros" step="0.1"></label><br>
+    <button onclick="salvarDados()">Adicionar Cliente</button>
+    <input type="file" accept=".csv" onchange="carregarArquivo(event)">
+    
+    <h3>Clientes Cadastrados</h3>
+    <table border="1">
+        <tr>
+            <th>Número de Série</th>
+            <th>Nome</th>
+            <th>Valor a Receber</th>
+            <th>Juros (%)</th>
+            <th>Valor Total</th>
+            <th>Data do Cadastro</th>
+            <th>Ações</th>
+        </tr>
+        <tbody id="tabela_resultados"></tbody>
+    </table>
+</body>
+</html>
