@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Pagamentos</title>
     <script>
-        function carregarDados() {
+        
+function carregarDados() {
     db.collection("clientes").get().then((querySnapshot) => {
         let tabela = "";
         querySnapshot.forEach((doc) => {
@@ -23,11 +24,8 @@
         });
         document.getElementById("tabela_resultados").innerHTML = tabela;
     });
+}
 
-            if (localStorage.getItem("dados_pagamentos")) {
-                document.getElementById("tabela_resultados").innerHTML = localStorage.getItem("dados_pagamentos");
-            }
-        }
 
         function verificarNumeroSerie() {
             let numeroSerie = document.getElementById("numero_serie").value;
@@ -42,7 +40,8 @@
             }
         }
 
-        function salvarDados() {
+        
+function salvarDados() {
     let numeroSerie = document.getElementById("numero_serie").value;
     let nome = document.getElementById("nome").value;
     let valorReceber = parseFloat(document.getElementById("valor_receber").value);
@@ -70,37 +69,8 @@
     }).catch((error) => {
         console.error("Erro ao salvar: ", error);
     });
+}
 
-            let numeroSerie = document.getElementById("numero_serie").value;
-            let nome = document.getElementById("nome").value;
-            let valorReceber = parseFloat(document.getElementById("valor_receber").value);
-            let juros = parseFloat(document.getElementById("juros").value);
-            let dataCadastro = new Date().toLocaleDateString();
-            
-            if (isNaN(valorReceber) || isNaN(juros)) {
-                alert("Por favor, preencha todos os campos corretamente.");
-                return;
-            }
-            
-            let valorTotal = valorReceber - (valorReceber * (juros / 100));
-            
-            let resultado = `
-                <tr>
-                    <td>${numeroSerie}</td>
-                    <td style="background-color: yellow;">${nome}</td>
-                    <td style="background-color: lightgreen;">R$ ${valorReceber.toFixed(2)}</td>
-                    <td>${juros}%</td>
-                    <td style="background-color: yellow;">R$ ${valorTotal.toFixed(2)}</td>
-                    <td>${dataCadastro}</td>
-                    <td><button onclick="editarDados(this)">Editar</button> <button onclick="deletarDados(this)">Deletar</button></td>
-                </tr>
-            `;
-            
-            document.getElementById("tabela_resultados").innerHTML += resultado;
-            localStorage.setItem("dados_pagamentos", document.getElementById("tabela_resultados").innerHTML);
-            salvarEmArquivo();
-            limparFormulario();
-        }
 
         function limparFormulario() {
             document.getElementById("numero_serie").value = "";
