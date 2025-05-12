@@ -147,11 +147,59 @@ function deletarDados(botao) {
             };
             reader.readAsText(file);
         }
-    </script>
+    
+function buscarNomePorNumeroSerie() {
+  let numeroSerie = document.getElementById("numero_serie").value;
+  if (!numeroSerie) return;
+
+  db.collection("clientes")
+    .where("numeroSerie", "==", numeroSerie)
+    .get()
+    .then((querySnapshot) => {
+      if (!querySnapshot.empty) {
+        let dados = querySnapshot.docs[0].data();
+        document.getElementById("nome").value = dados.nome;
+      }
+    });
+}
+</script>
+
 
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js">
+function buscarNomePorNumeroSerie() {
+  let numeroSerie = document.getElementById("numero_serie").value;
+  if (!numeroSerie) return;
+
+  db.collection("clientes")
+    .where("numeroSerie", "==", numeroSerie)
+    .get()
+    .then((querySnapshot) => {
+      if (!querySnapshot.empty) {
+        let dados = querySnapshot.docs[0].data();
+        document.getElementById("nome").value = dados.nome;
+      }
+    });
+}
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js">
+function buscarNomePorNumeroSerie() {
+  let numeroSerie = document.getElementById("numero_serie").value;
+  if (!numeroSerie) return;
+
+  db.collection("clientes")
+    .where("numeroSerie", "==", numeroSerie)
+    .get()
+    .then((querySnapshot) => {
+      if (!querySnapshot.empty) {
+        let dados = querySnapshot.docs[0].data();
+        document.getElementById("nome").value = dados.nome;
+      }
+    });
+}
+</script>
+
 
 <script>
   const firebaseConfig = {
@@ -165,12 +213,28 @@ function deletarDados(botao) {
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+
+function buscarNomePorNumeroSerie() {
+  let numeroSerie = document.getElementById("numero_serie").value;
+  if (!numeroSerie) return;
+
+  db.collection("clientes")
+    .where("numeroSerie", "==", numeroSerie)
+    .get()
+    .then((querySnapshot) => {
+      if (!querySnapshot.empty) {
+        let dados = querySnapshot.docs[0].data();
+        document.getElementById("nome").value = dados.nome;
+      }
+    });
+}
 </script>
+
 
 </head>
 <body onload="carregarDados()">
     <h2>Sistema de Pagamentos</h2>
-    <label>Número de Série: <input type="text" id="numero_serie" onblur="verificarNumeroSerie()"></label><br>
+    <label>Número de Série: <input type="text" id="numero_serie" onblur="buscarNomePorNumeroSerie()" onblur="verificarNumeroSerie()"></label><br>
     <label>Nome: <input type="text" id="nome"></label><br>
     <label>Valor a Receber: <input type="number" id="valor_receber" step="0.01"></label><br>
     <label>Juros (%): <input type="number" id="juros" step="0.1"></label><br>
@@ -212,5 +276,21 @@ function exportarCSV() {
     document.body.removeChild(link);
   });
 }
+
+function buscarNomePorNumeroSerie() {
+  let numeroSerie = document.getElementById("numero_serie").value;
+  if (!numeroSerie) return;
+
+  db.collection("clientes")
+    .where("numeroSerie", "==", numeroSerie)
+    .get()
+    .then((querySnapshot) => {
+      if (!querySnapshot.empty) {
+        let dados = querySnapshot.docs[0].data();
+        document.getElementById("nome").value = dados.nome;
+      }
+    });
+}
 </script>
+
 </html>
