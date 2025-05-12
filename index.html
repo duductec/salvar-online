@@ -42,7 +42,8 @@
             }
         }
 
-        function salvarDados() {
+        
+function salvarDados() {
     let numeroSerie = document.getElementById("numero_serie").value;
     let nome = document.getElementById("nome").value;
     let valorReceber = parseFloat(document.getElementById("valor_receber").value);
@@ -64,43 +65,14 @@
         valorTotal,
         dataCadastro
     }).then(() => {
-        alert("Salvo com sucesso no Firebase!");
+        alert("Cliente salvo no Firebase!");
         carregarDados();
         limparFormulario();
     }).catch((error) => {
         console.error("Erro ao salvar: ", error);
     });
+}
 
-            let numeroSerie = document.getElementById("numero_serie").value;
-            let nome = document.getElementById("nome").value;
-            let valorReceber = parseFloat(document.getElementById("valor_receber").value);
-            let juros = parseFloat(document.getElementById("juros").value);
-            let dataCadastro = new Date().toLocaleDateString();
-            
-            if (isNaN(valorReceber) || isNaN(juros)) {
-                alert("Por favor, preencha todos os campos corretamente.");
-                return;
-            }
-            
-            let valorTotal = valorReceber - (valorReceber * (juros / 100));
-            
-            let resultado = `
-                <tr>
-                    <td>${numeroSerie}</td>
-                    <td style="background-color: yellow;">${nome}</td>
-                    <td style="background-color: lightgreen;">R$ ${valorReceber.toFixed(2)}</td>
-                    <td>${juros}%</td>
-                    <td style="background-color: yellow;">R$ ${valorTotal.toFixed(2)}</td>
-                    <td>${dataCadastro}</td>
-                    <td><button onclick="editarDados(this)">Editar</button> <button onclick="deletarDados(this)">Deletar</button></td>
-                </tr>
-            `;
-            
-            document.getElementById("tabela_resultados").innerHTML += resultado;
-            localStorage.setItem("dados_pagamentos", document.getElementById("tabela_resultados").innerHTML);
-            salvarEmArquivo();
-            limparFormulario();
-        }
 
         function limparFormulario() {
             document.getElementById("numero_serie").value = "";
@@ -135,34 +107,36 @@
             a.click();
         }
         
-        function carregarArquivo(event) {
-            let file = event.target.files[0];
-            if (!file) return;
-            
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let linhas = e.target.result.split("\n");
-                let tabela = "";
-                for (let i = 1; i < linhas.length; i++) {
-                    let colunas = linhas[i].split(",");
-                    if (colunas.length >= 6) {
-                        tabela += `
-                            <tr>
-                                <td>${colunas[0]}</td>
-                                <td style="background-color: yellow;">${colunas[1]}</td>
-                                <td style="background-color: lightgreen;">${colunas[2]}</td>
-                                <td>${colunas[3]}</td>
-                                <td style="background-color: yellow;">${colunas[4]}</td>
-                                <td>${colunas[5]}</td>
-                                <td><button onclick="editarDados(this)">Editar</button> <button onclick="deletarDados(this)">Deletar</button></td>
-                            </tr>
-                        `;
-                    }
-                }
-                document.getElementById("tabela_resultados").innerHTML = tabela;
-                localStorage.setItem("dados_pagamentos", tabela);
-            };
-            reader.readAsText(file);
+        
+function carregarArquivo(event) {
+    let file = event.target.files[0];
+    if (!file) return;
+
+    let reader = new FileReader();
+    reader.onload = function(e) {
+        let linhas = e.target.result.split("
+");
+        for (let i = 1; i < linhas.length; i++) {
+            let colunas = linhas[i].split(",");
+            if (colunas.length >= 6) {
+                db.collection("clientes").add({
+                    numeroSerie: colunas[0],
+                    nome: colunas[1],
+                    valorReceber: parseFloat(colunas[2].replace("R$", "").trim()),
+                    juros: parseFloat(colunas[3].replace("%", "").trim()),
+                    valorTotal: parseFloat(colunas[4].replace("R$", "").trim()),
+                    dataCadastro: colunas[5]
+                }).then(() => {
+                    carregarDados();
+                }).catch((error) => {
+                    console.error("Erro ao importar linha do CSV:", error);
+                });
+            }
+        }
+    };
+    reader.readAsText(file);
+}
+
         }
     </script>
 
