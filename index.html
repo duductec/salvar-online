@@ -162,7 +162,23 @@ function buscarNomePorNumeroSerie() {
       }
     });
 }
+
+function somarSelecionados() {
+  let checkboxes = document.querySelectorAll("#tabela_resultados input[type='checkbox']");
+  let soma = 0;
+
+  checkboxes.forEach((chk) => {
+    if (chk.checked) {
+      let linha = chk.closest("tr");
+      let valor = parseFloat(linha.children[5].innerText.replace("R$", "").replace(",", "."));
+      soma += valor;
+    }
+  });
+
+  document.getElementById("soma_valores").innerText = soma.toFixed(2);
+}
 </script>
+
 
 
 <!-- Firebase SDK -->
@@ -181,7 +197,23 @@ function buscarNomePorNumeroSerie() {
       }
     });
 }
+
+function somarSelecionados() {
+  let checkboxes = document.querySelectorAll("#tabela_resultados input[type='checkbox']");
+  let soma = 0;
+
+  checkboxes.forEach((chk) => {
+    if (chk.checked) {
+      let linha = chk.closest("tr");
+      let valor = parseFloat(linha.children[5].innerText.replace("R$", "").replace(",", "."));
+      soma += valor;
+    }
+  });
+
+  document.getElementById("soma_valores").innerText = soma.toFixed(2);
+}
 </script>
+
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js">
 function buscarNomePorNumeroSerie() {
@@ -198,7 +230,23 @@ function buscarNomePorNumeroSerie() {
       }
     });
 }
+
+function somarSelecionados() {
+  let checkboxes = document.querySelectorAll("#tabela_resultados input[type='checkbox']");
+  let soma = 0;
+
+  checkboxes.forEach((chk) => {
+    if (chk.checked) {
+      let linha = chk.closest("tr");
+      let valor = parseFloat(linha.children[5].innerText.replace("R$", "").replace(",", "."));
+      soma += valor;
+    }
+  });
+
+  document.getElementById("soma_valores").innerText = soma.toFixed(2);
+}
 </script>
+
 
 
 <script>
@@ -228,7 +276,23 @@ function buscarNomePorNumeroSerie() {
       }
     });
 }
+
+function somarSelecionados() {
+  let checkboxes = document.querySelectorAll("#tabela_resultados input[type='checkbox']");
+  let soma = 0;
+
+  checkboxes.forEach((chk) => {
+    if (chk.checked) {
+      let linha = chk.closest("tr");
+      let valor = parseFloat(linha.children[5].innerText.replace("R$", "").replace(",", "."));
+      soma += valor;
+    }
+  });
+
+  document.getElementById("soma_valores").innerText = soma.toFixed(2);
+}
 </script>
+
 
 
 </head>
@@ -291,6 +355,22 @@ function buscarNomePorNumeroSerie() {
       }
     });
 }
+
+function somarSelecionados() {
+  let checkboxes = document.querySelectorAll("#tabela_resultados input[type='checkbox']");
+  let soma = 0;
+
+  checkboxes.forEach((chk) => {
+    if (chk.checked) {
+      let linha = chk.closest("tr");
+      let valor = parseFloat(linha.children[5].innerText.replace("R$", "").replace(",", "."));
+      soma += valor;
+    }
+  });
+
+  document.getElementById("soma_valores").innerText = soma.toFixed(2);
+}
 </script>
+
 
 </html>
