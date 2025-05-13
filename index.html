@@ -77,17 +77,18 @@
         let tabela = "";
         querySnapshot.forEach((doc) => {
           let d = doc.data();
+          let id = doc.id;
           tabela += `
             <tr>
               <td>${d.numeroSerie}</td>
-              <td>${d.nome}</td>
-              <td>R$ ${parseFloat(d.valorReceber).toFixed(2)}</td>
+              <td style="background-color: #fff8b3;">${d.nome}</td>
+              <td style="background-color: #ccffcc;">R$ ${parseFloat(d.valorReceber).toFixed(2)}</td>
               <td>${d.juros}%</td>
-              <td>R$ ${parseFloat(d.valorTotal).toFixed(2)}</td>
+              <td style="background-color: #fff8b3;">R$ ${parseFloat(d.valorTotal).toFixed(2)}</td>
               <td>${d.dataCadastro}</td>
               <td>
-                <button onclick="editarDados(this)">Editar</button>
-                <button onclick="deletarDados(this)">Deletar</button>
+                <button onclick="editarDados(this)" data-id="${id}">Editar</button>
+                <button onclick="deletarDados(this)" data-id="${id}">Deletar</button>
               </td>
             </tr>`;
         });
@@ -116,14 +117,9 @@
     }
 
     function deletarDados(botao) {
-      let linha = botao.closest("tr");
-      let numeroSerie = linha.children[0].innerText;
-      db.collection("clientes_dados_95321").where("numeroSerie", "==", numeroSerie).get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          db.collection("clientes_dados_95321").doc(doc.id).delete().then(() => {
-            carregarDados();
-          });
-        });
+      let id = botao.getAttribute("data-id");
+      db.collection("clientes_dados_95321").doc(id).delete().then(() => {
+        carregarDados();
       });
     }
 
