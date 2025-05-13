@@ -73,7 +73,7 @@
     }
 
     function carregarDados() {
-      db.collection("clientes_dados_95321").get().then((querySnapshot) => {
+      db.collection("clientes_dados_95321").orderBy("timestamp", "asc").get().then((querySnapshot) => {
         let tabela = "";
         querySnapshot.forEach((doc) => {
           let d = doc.data();
@@ -131,7 +131,7 @@
     }
 
     function exportarCSV() {
-      db.collection("clientes_dados_95321").get().then((querySnapshot) => {
+      db.collection("clientes_dados_95321").orderBy("timestamp", "asc").get().then((querySnapshot) => {
         let csv = "Número de Série,Nome,Valor a Receber,Juros (%),Valor Total,Data do Cadastro\n";
         querySnapshot.forEach((doc) => {
           let d = doc.data();
